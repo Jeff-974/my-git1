@@ -28,40 +28,40 @@ cond(yes)->ot(right)->e
 
 ### 2.2 Action-Value Methods（four action selection methods) & incremental implementation
 
-当采用定义的方法计算，即直接进行与环境交互得到许多奖励、然后求平均的方法。这也是蒙特卡洛方法的基础。状态a处的行为的值为
+当采用定义的方法计算，即直接进行与环境交互得到许多奖励、然后求平均的方法。这也是蒙特卡洛方法的基础。状态a处的行为的值为  
 $$
 Q_t(a)=\frac{R_1+R_2+...+R_{N_t(a)}}{N_t(a)}
-$$
+$$  
 
 根据大数定律：$Q_t(a)\rightarrow q(a)\ as\ N_t\rightarrow \infty$。可以估计q(a)的值。  
-而接下来有两种策略，第一种是选择当前值最大的那个行为作为最优策略,即贪心策略。即：
-$$A_t=\underset{a}{\operatorname{arg\,max}}Q_t(a) $$
+而接下来有两种策略，第一种是选择当前值最大的那个行为作为最优策略,即贪心策略。即：  
+$$A_t=\underset{a}{\operatorname{arg\,max}}Q_t(a) $$  
 
-贪心的策略选择就是要利用现有的知识，使得当前的回报最大。但是为了得到最优策略，有时需要偶尔进行探索。即是**探索-利用平衡策略**。其中比较简单的一种被称为$\epsilon$-greedy动作选择法：
+贪心的策略选择就是要利用现有的知识，使得当前的回报最大。但是为了得到最优策略，有时需要偶尔进行探索。即是**探索-利用平衡策略**。其中比较简单的一种被称为$\epsilon$-greedy动作选择法：  
 $$
 A_t^*=\begin{cases}
     \operatorname{arg\ max}_aQ_t(a), \mathrm{with\ probability}\ 1-\epsilon \\
     \mathrm{a\ random\ action, with\ probability\ \epsilon}
 \end{cases}
-$$
+$$  
 
-另外还有两种动作选择法，分别称为UCB动作选择和波尔兹曼动作选择：
+另外还有两种动作选择法，分别称为UCB动作选择和波尔兹曼动作选择：  
 $$
 A_t=\underset{a}{\operatorname{arg\ max}}\left[Q_t(a)+c\sqrt{\frac{\ln t}{N_t(a)}}\right]
-$$
+$$  
 
 $$
 P_r\{A_t=a\}=\frac{e^{H_t(a)}}{\sum_{b=1}^ke^{H_t(b)}}=\pi(a)
-$$
+$$  
 
 它们的参数分别是$c$和$k$。
-当选择了目前的动作之后带来的回报是R，会进行状态更新迭代（增量实现）：
+当选择了目前的动作之后带来的回报是R，会进行状态更新迭代（增量实现）：  
 $$
 \begin{gathered}
     N(A) \leftarrow N(A)+1 \\ 
     Q(A) \leftarrow Q(A)+\frac{1}{N(A)}(R-Q(A))
 \end{gathered}
-$$
+$$  
 
 其中我们将参数$\alpha=\frac{1}{k}=\frac{1}{N(A)}$作为增量的步长。将当即汇报R与先前的估计值Q(A)的差值叫做一次估计时的**误差**。  
 
