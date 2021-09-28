@@ -83,7 +83,7 @@ $$
 
 ### 3.1 The Agent–Environment Interface
 
-![1](https://cdn.jsdelivr.net/gh/Jeff-974/my-git1/images/1.png)
+![1](https://cdn.jsdelivr.net/gh/Jeff-974/my-git1/images/1.png#pic_center)
 <center>Figure 2: The agent–environment interaction in reinforcement learning.</center>
 
 #### 对图2模型的理解  
