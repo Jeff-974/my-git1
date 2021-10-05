@@ -69,7 +69,12 @@ $\forall s\in\mathcal{S},a\in\mathcal{A}$:
 $$
 \begin{aligned}
     q_\pi(s,\pi'(s)) &= \sum_a\pi'(a|s)q_\pi(s,a)\\ &= \frac{\epsilon}{|\mathcal{A}(s)|}\sum_aq_\pi(s,a)+(1-\epsilon)\underset{a}{\max}\ q_\pi(s,a)\\ &\geq \frac{\epsilon}{|\mathcal{A}(s)|}\sum_aq_\pi(s,a)+(1-\epsilon)\sum_a\frac{\pi(a|s)-\epsilon/|\mathcal{A}(s)|}{1-\epsilon}q_\pi(s,a)\\ &= \sum_a\pi(a|s)q_\pi(s,a)=v_\pi(s)
-\end{aligned}
+\end{aligned}\tag{5.1}
+$$
+
+于是有：
+$$
+\forall s\in\mathcal{S},v_{\pi'}(s)\geq v_\pi(s) \tag{5.2}
 $$
 
 ### 5.5 Off-Policy Predicts  
@@ -79,19 +84,30 @@ $$
 #### 5.5.1 普通重要性采样  
 定义重要性采样比率：  
 $$
-\rho_t^T=\prod_{k=t}^{T-1}\frac{\pi(A_k|S_k)}{\mu(A_k|S_k)}
+\rho_t^T=\prod_{k=t}^{T-1}\frac{\pi(A_k|S_k)}{\mu(A_k|S_k)} \tag{5.3}
 $$
 
-这也是target policy和behavior policy下从时间t到终止时间T的状态-动作对的相对转移概率。  
+(5.3)也是target policy和behavior policy下从时间t到终止时间T的状态-动作对的相对转移概率。  
 用$\mathcal{T}(s)$代表第一次访问状态s的实验所含时刻的集合；用$T(t)$代表时刻t所在实验的终止时间，即从t开始第一次结束的时刻。$G_t$代表从时刻t到$T(t)$的回报。于是，可以得出普通重要性采样估计$v_\pi(s)$的公式：  
 $$
-V(s)=\frac{\sum_{t\in\mathcal{T}(s)}\rho_t^{T(t)}G_t}{\vert\mathcal{T}(s)\vert}
+V(s)=\frac{\sum_{t\in\mathcal{T}(s)}\rho_t^{T(t)}G_t}{\vert\mathcal{T}(s)\vert}\tag{5.4}
 $$
 
 #### 5.5.2 加权重要性采样  
 有时，如果采样分布对$\pi$期望估计偏差较大时，普通的重要性采样就不满足无偏估计。于是引入加权重要性采样：  
 $$
-V(s)=\frac{\sum_{t\in\mathcal{T}(s)}\rho_t^{T(t)}G_t}{\sum_{t\in\mathcal{T}(s)}\rho_t^{T(t)}}
+V(s)=\frac{\sum_{t\in\mathcal{T}(s)}\rho_t^{T(t)}G_t}{\sum_{t\in\mathcal{T}(s)}\rho_t^{T(t)}}\tag{5.5}
 $$
 
 #### 5.5.3 增量式的蒙特卡罗算法实现  
+设(5.5)的$W_i=\rho_t^{T(t)}$，不按照时间步，而按照进行实验的次序编号：得到回报$G_1,G_2,...,G_{n-1}$。 
+$$
+V_n=\frac{\sum_{k=1}^{n-1}W_kG_k}{\sum_{k=1}^{n-1}W_k}\quad n\geq2\tag{5.6}
+$$
+
+利用2.3多臂赌博机问题增量实现的思想，将(5.6)增量实现： 
+$$\begin{gathered}
+   V_{n+1}=V_n+\frac{W_n}{C_n}[G_n-V_n],\quad n\geq1\tag{5.7}\\ 
+   C_{n+1}=C_n+W_{n+1}
+\end{gathered}
+$$
