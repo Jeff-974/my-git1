@@ -111,3 +111,22 @@ $$\begin{gathered}
    C_{n+1}=C_n+W_{n+1}
 \end{gathered}
 $$
+
+于是，得到off-policy every-visit的加权重要性采样的MC控制算法：  
+1. 初始化:  
+    $\forall s\in \mathcal{S}\forall a\in \mathcal{A}(s)$:  
+    - $Q(s,a) \leftarrow$ 任意值  
+    - $C(s,a) \leftarrow 0$  
+    - $\pi(s) \leftarrow $ 对Q贪婪的确定性的某个策略  
+
+2. 循环`while True`:  
+    - 产生利用任意软策略$\mu$的实验：$S_0,A_0,R_1,...,S_{T-1},A_{T-1},R_{T},S_{T}$  
+    - $G\leftarrow 0$  
+    - $W \leftarrow 1$
+    - `for t in range(T-1,0,-1):`
+        - $G \leftarrow \gamma G+R_{t+1}$  
+        - $C(S_t,A_t) \leftarrow C(S_t,A_t)+W$  
+        - $Q(S_t,A_t) \leftarrow Q(S_t,A_t)+\frac{W}{C(S_t,A_t)}[G-Q(S_t,A_t)]$  
+        - $\pi(S_t) \leftarrow \underset{a}{Q(S_t,a)}$  
+        - $W\leftarrow W\frac{1}{\mu(A_t|S_t)}$  
+        - `if W==0: exit`
