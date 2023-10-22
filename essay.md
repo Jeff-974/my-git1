@@ -34,3 +34,4 @@ $$\begin{aligned}
 &4\stackrel{1}{\rightarrow}1\stackrel{4}{\rightarrow}4\stackrel{2}{\rightarrow}2
 \end{aligned}
 $$  
+<img width="350" alt="屏幕截图 2023-10-22 113853" src="https://github.com/Jeff-974/my-git1/assets/81134373/b0ffa9f1-a226-4dcc-bf71-cbb8a42f670a">
